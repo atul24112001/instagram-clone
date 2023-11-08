@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id             String          @id @default(uuid())
+  name           String
+  email          String          @unique
+  password       String
+  token          String?
+  isLogin        Boolean         @default(false)
+  updateAt       DateTime        @default(now()) @updatedAt @map("updated_at")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  profile        profile[]
+  user_followers user_follower[]
+
+  @@map("users")
+}
+
+model profile {
+  id             String          @id @default(uuid())
+  user           user            @relation(fields: [userId], references: [id])
+  profileImage   String?         @map("profile_image")
+  updateAt       DateTime        @default(now()) @updatedAt @map("updated_at")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  userId         String          @unique @map("user_id")
+  user_followers user_follower[]
+  post           post[]
+
+  @@map("profiles")
+}
+
+model user_follower {
+  id        String   @id @default(uuid())
+  follower  user     @relation(fields: [userId], references: [id])
+  follows   profile  @relation(fields: [profileId], references: [id])
+  updateAt  DateTime @default(now()) @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  userId    String
+  profileId String
+
+  @@map("user_follwers")
+}
+
+model post {
+  id        String   @id @default(uuid())
+  profile   profile  @relation(fields: [profileId], references: [id])
+  caption   String?
+  assets    asset[]
+  updateAt  DateTime @default(now()) @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  profileId String   @map("profile_id")
+
+  @@map("posts")
+}
+
+model asset {
+  id        String    @id @default(uuid())
+  url       String
+  type      AssetType
+  updateAt  DateTime  @default(now()) @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  post      post?     @relation(fields: [postId], references: [id])
+  postId    String?   @map("post_id")
+}
+
+enum AssetType {
+  image
+  mp4
+}
