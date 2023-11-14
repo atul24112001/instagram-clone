@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon src/app.ts"
+    "dev": "nodemon src/app.ts",
+    "start": "tsc && npx prisma migrate deploy && node dist/app.js"
   },
   "repository": {
     "type": "git",
