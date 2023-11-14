@@ -8,6 +8,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { authenticate } from "./redux/auth/authSlice";
 import Layout from "./components/layout";
+import Home from "./components/home";
 // import { VERIFY_USER } from "./graphql/query";
 // import { authenticate } from "./redux/auth/authSlice";
 
@@ -45,7 +46,7 @@ export default function App() {
       {isAuthenticated ? (
         <Layout>
           <Routes>
-            <Route path="/" element={<div>hii</div>} />
+            <Route path="/" Component={Home} />
             <Route path="/profile" element={<div>profile</div>} />
             <Route path="/search" element={<div>search</div>} />
             <Route path="*" element={<Navigate to="/" />} />

@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 
 type Props = {
   open: boolean;
