@@ -5,6 +5,7 @@ type Props = {
   fullWidth?: boolean;
   loading?: boolean;
   variant?: "contain" | "text";
+  size?: "small" | "medium" | "large";
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function Button({
@@ -13,6 +14,7 @@ export default function Button({
   fullWidth,
   loading,
   variant = "contain",
+  size = "medium",
   ...rest
 }: Props) {
   return (
@@ -22,7 +24,9 @@ export default function Button({
         variant == "contain"
           ? "bg-primary-button text-white hover:bg-primary-button-hover"
           : "transparent text-primary-button hover:text-primary-button-hover"
-      } flex justify-center rounded-lg py-1 px-4 `}
+      } flex justify-center rounded-lg py-1 px-4 ${
+        size == "small" ? "text-sm" : "text-base"
+      } `}
       disabled={disabled}
       {...rest}
       onClick={(e) => {

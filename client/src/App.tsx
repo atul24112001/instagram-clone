@@ -3,14 +3,11 @@ import { RootStateType } from "./redux/store";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Authentication from "./components/authentication";
 
-// import { useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { authenticate } from "./redux/auth/authSlice";
 import Layout from "./components/layout";
 import Home from "./components/home";
-// import { VERIFY_USER } from "./graphql/query";
-// import { authenticate } from "./redux/auth/authSlice";
 
 const VERIFY_USER = gql`
   query VerifyUser {

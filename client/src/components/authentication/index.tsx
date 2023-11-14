@@ -44,22 +44,18 @@ export default function Authentication() {
   }, [pathname]);
 
   const submitDisabled = useMemo(() => {
-    let disabled = true;
     if (
-      haveAccount &&
-      details.password.length > 5 &&
-      details.email.length > 10
+      (haveAccount &&
+        details.password.length > 5 &&
+        details.email.length > 10) ||
+      (details.password.length > 5 &&
+        details.email.length > 10 &&
+        details.name.length > 3 &&
+        details.username.length > 6)
     ) {
-      disabled = false;
-    } else if (
-      details.password.length > 5 &&
-      details.email.length > 10 &&
-      details.name.length > 3 &&
-      details.username.length > 6
-    ) {
-      disabled = false;
+      return false;
     }
-    return disabled;
+    return true;
   }, [details, haveAccount]);
 
   const submitHandler = async (e: ChangeEvent<HTMLFormElement>) => {
@@ -79,9 +75,11 @@ export default function Authentication() {
           },
         });
       }
-      // const
+
       if (response.data) {
-        const target = haveAccount ? response.data.login : response.data.signup;
+        const target = haveAccount
+          ? response.data.login
+          : response.data.createUser;
         localStorage.setItem("token", target.token);
         dispatch(
           authenticate({

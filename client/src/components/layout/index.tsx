@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Model from "../helper/Model";
 import Button from "../helper/Button";
+import Sidebar from "./Sidebar";
 
 const rootVariables: { [key: string]: string } = {
   "--primary-background": "0, 0, 0",
@@ -127,13 +128,23 @@ export default function Layout({ children }: PropsWithChildren) {
                 key={title}
                 to={url}
               >
-                <Icon /> <span className="hidden lg:inline">{title}</span>
+                {({ isActive }) => (
+                  <>
+                    <Icon strokeWidth={isActive ? 2.5 : undefined} />{" "}
+                    <span className="hidden lg:inline">{title}</span>
+                  </>
+                )}
               </NavLink>
             );
           })}
         </div>
       </div>
-      <div className="flex-1 "> {children}</div>
+      <div className="flex flex-1 overflow-y-auto ">
+        {children}
+        <div className="hidden md:block flex-1">
+          <Sidebar />
+        </div>
+      </div>
       <div className="md:hidden  flex justify-evenly items-center border-t-[1px] border-solid  border-primary-border ">
         {routes.map((route) => {
           const { Icon, title, url, onClick } = route;
@@ -159,7 +170,12 @@ export default function Layout({ children }: PropsWithChildren) {
               key={title}
               to={url ?? ""}
             >
-              <Icon /> <span className="hidden lg:inline">{title}</span>
+              {({ isActive }) => (
+                <>
+                  <Icon strokeWidth={isActive ? 2.5 : undefined} />
+                  <span className="hidden lg:inline">{title}</span>
+                </>
+              )}
             </NavLink>
           );
         })}

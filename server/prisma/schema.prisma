@@ -35,6 +35,15 @@ model profile {
   @@map("profiles")
 }
 
+// model user_follow {
+//   id        String   @id @default(uuid())
+//   user      user     @relation(fields: [userId], references: [id])
+//   follow    String
+//   updateAt  DateTime @default(now()) @updatedAt @map("updated_at")
+//   createdAt DateTime @default(now()) @map("created_at")
+//   userId    String
+// }
+
 model user_follower {
   id        String   @id @default(uuid())
   follower  user     @relation(fields: [userId], references: [id])
