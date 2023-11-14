@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.message {
+    color: var(--main);
+    transform: translateY(-20px);
+}
+
+
+@keyframes anim {
+    12.5% {
+        stroke-dasharray: 34.1572296611px, 242.776657104492px;
+        stroke-dashoffset: -26.7044318076px;
+    }
+
+    43.75% {
+        stroke-dasharray: 85.4718327717px, 242.776657104492px;
+        stroke-dashoffset: -85.4718327717px;
+    }
+
+    100% {
+        stroke-dasharray: 2.42776657104px, 242.776657104492px;
+        stroke-dashoffset: -240.348890533px;
+    }
+}
+
+.path {
+    stroke-dasharray: 2.42776657104px, 242.776657104492px;
+    stroke-dashoffset: 0;
+    animation: anim 1.6s linear infinite;
+}

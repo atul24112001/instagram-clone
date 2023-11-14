@@ -1,4 +1,11 @@
-import { getToken, hashText, prisma, verifyHash } from "../utils/functions";
+import { GraphQLError } from "graphql";
+import {
+  getToken,
+  hashText,
+  prisma,
+  verifyHash,
+  verifyToken,
+} from "../utils/functions";
 
 export interface CreateUserPayload {
   email: string;
@@ -14,10 +21,11 @@ class UserService {
     const emailIsNoUnique = await this.getUserById(email);
 
     if (emailIsNoUnique) {
-      return {
-        message: "Email already exist, please login.",
-        status: 400,
-      };
+      throw new GraphQLError("Email already exist, please login.", {
+        extensions: {
+          code: "FORBIDDEN",
+        },
+      });
     }
 
     const user = await prisma.user.create({
@@ -51,7 +59,9 @@ class UserService {
     return {
       message: "Sign up successfully!",
       token,
-      status: 200,
+      name,
+      email,
+      id: user.id,
     };
   }
 
@@ -60,17 +70,22 @@ class UserService {
     const userExist = await this.getUserById(email);
 
     if (!userExist) {
-      return {
-        message: "User Not found, please sign up",
-        status: 400,
-      };
+      throw new GraphQLError("User Not found, please sign up.", {
+        extensions: {
+          code: "FORBIDDEN",
+        },
+      });
     }
     const correctPassword = await verifyHash(password, userExist.password);
     if (!correctPassword) {
-      return {
-        message: "Invalid Password, please enter correct password.",
-        status: 400,
-      };
+      throw new GraphQLError(
+        "Invalid Password, please enter correct password.",
+        {
+          extensions: {
+            code: "FORBIDDEN",
+          },
+        }
+      );
     }
     const token = getToken({
       email,
@@ -90,38 +105,50 @@ class UserService {
     return {
       message: "Login Successful",
       token,
-      status: 200,
+      name: userExist.name,
+      email,
+      id: userExist.id,
     };
   }
 
   public static async getUserById(id: string) {
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          OR: [{ id: id }, { email: id }],
-        },
-      });
-      if (user) {
-        return user;
-      }
-    } catch (error) {
-      console.log(error);
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [{ id: id }, { email: id }],
+      },
+    });
+    if (user) {
+      return user;
     }
+
     return null;
   }
 
   public static async verifyUser(context: any) {
+    console.log("Verifying", context);
     if (!context.currentUser) {
-      return {
-        message: "Verification failed.",
-        status: 400,
-      };
+      throw new GraphQLError("Verification failed.", {
+        extensions: {
+          code: "FORBIDDEN",
+        },
+      });
     }
     return {
       id: context.currentUser.id,
       name: context.currentUser.name,
       email: context.currentUser.email,
     };
+  }
+
+  public static async verifyToken(token: string) {
+    // const payload = await verifyToken(token);
+    //  if(ctx)
+
+    throw new GraphQLError("Verification failed.", {
+      extensions: {
+        code: "FORBIDDEN",
+      },
+    });
   }
 }
 

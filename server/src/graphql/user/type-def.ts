@@ -7,7 +7,9 @@ export const typeDefs = `#graphql
 
     type AuthResponse {
         message: String!
-        status: Int!
+        id: ID!
+        name: String!
+        email: String!
         token: String
     }
 `;

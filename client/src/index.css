@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lobster&family=Nunito+Sans:ital,opsz,wght@0,6..12,200;0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700;1,6..12,200&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+  box-sizing: border-box;
+  font-family: 'Nunito Sans', sans-serif;
+  color: rgb(var(--primary-text));
+}
+
+:root {
+  --primary-border: 219, 219, 219;
+
+  /* --primary-background: 0, 0, 0; */
+  /* --primary-background:255, 255, 255; */
+  --secondary-background: 250, 250, 250;
+
+  /* --primary-text: 255, 255, 255; */
+  --primary-text: 0, 0, 0;
+
+  --secondary-text: 115, 115, 115;
+
+  --primary-button: 0, 149, 246;
+  --primary-button-hover: 24, 119, 242;
+
+}
