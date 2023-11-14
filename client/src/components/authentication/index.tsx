@@ -110,7 +110,7 @@ export default function Authentication() {
   return (
     <div className=" w-screen h-screen flex justify-center items-center">
       <div className="w-screen h-screen overflow-y-auto md:h-auto  md:w-2/3 lg:w-1/3 border-[1px] border-border-primary p-10">
-        <div className="mb-8">
+        <div className="mb-8 flex justify-center">
           <Logo />
         </div>
         <form onSubmit={submitHandler}>

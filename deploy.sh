@@ -16,7 +16,6 @@ cd ~/instagram-clone
 git pull origin main
 
 if [ $? -eq 0 ]; then
-do
     echo "Pulled latest code"
 else
     echo "Pull latest failed."
