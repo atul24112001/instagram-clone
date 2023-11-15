@@ -1,5 +1,5 @@
 import { expressMiddleware } from "@apollo/server/express4";
-import express from "express";
+import express, { Response, Request } from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import getGraphqlServer from "./graphql";
@@ -20,6 +20,9 @@ async function startServer() {
     })
   );
 
+  app.use("/", (req: Request, res: Response) => {
+    res.send(`<h1>Instagram server is up and running: ${req.ip} </h1>`);
+  });
   app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
 }
 

@@ -64,6 +64,6 @@ else
   exit 1
 fi
 
-docker run --name $FRONTEND_IMAGE_NAME -d -p $FRONTEND_PORT:3000 atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
+docker run --name $FRONTEND_IMAGE_NAME -d -pa $FRONTEND_PORT:3000 atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
 
 echo "Build Completed."
