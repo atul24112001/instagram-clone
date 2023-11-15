@@ -24,14 +24,15 @@ fi
 
 # backend
 echo "Running backend build"
-cd ~/instagam-clone/server
 
-for PORT in "${PORTS[@]}"
+for PORT in "${BACKEND_PORTS[@]}"
 do 
     docker stop $BACKEND_IMAGE_NAME-$PORT
     docker rm $BACKEND_IMAGE_NAME-$PORT
 done
 
+cd ~/instagram-clone/server
+pwd
 docker rmi atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG
 docker build -t atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG .
  
@@ -43,8 +44,9 @@ else
 fi
 
 
-for PORT in "${PORTS[@]}"
+for PORT in "${BACKEND_PORTS[@]}"
 do
+  echo $PORT
   docker run -e DATABASE_URL=$DATABASE_URL/$DATABASE_NAME --name $BACKEND_IMAGE_NAME-$PORT --network $DATABASE_NETWORK -d -p $PORT:8000 atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG
 done
 
@@ -64,6 +66,6 @@ else
   exit 1
 fi
 
-docker run --name $FRONTEND_IMAGE_NAME -d -pa $FRONTEND_PORT:3000 atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
+docker run --name $FRONTEND_IMAGE_NAME -d -p $FRONTEND_PORT:3000 atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
 
 echo "Build Completed."
