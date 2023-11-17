@@ -11,7 +11,7 @@ function Avatar({ size = "medium" }: Props) {
         size == "small" ? "p-2" : size == "large" ? "p-4" : "p-3"
       }`}
     >
-      <User fontSize={size == "small" ? 12 : size == "large" ? 32 : 24} />
+      <User size={size == "small" ? 22 : size == "large" ? 30 : 24} />
     </div>
   );
 }

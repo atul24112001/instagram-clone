@@ -36,9 +36,6 @@ export default function Layout({ children }: PropsWithChildren) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [openCreatePostModel, setOpenCreatePostModel] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  // const user = useSelector((state: RootStateType) => state.authReducer.user);
-
   useEffect(() => {
     document.title = "Instagram";
     for (const key in rootVariables) {
@@ -68,7 +65,7 @@ export default function Layout({ children }: PropsWithChildren) {
       {
         title: "Notifications",
         Icon: Heart,
-        url: "/",
+        url: "/notifications",
       },
       {
         title: "Profile",
@@ -99,7 +96,7 @@ export default function Layout({ children }: PropsWithChildren) {
   };
 
   return (
-    <div className="bg-primary-background h-screen w-screen flex flex-col md:flex-row">
+    <div className="bg-primary-background h-screen w-screen flex flex-col md:flex-row pb-8 md:pb-0">
       <div className="hidden md:block w-1/10 lg:w-1/6 border-r-[1px] border-solid  px-2 py-4 border-primary-border">
         <div className="px-4">
           <Logo size="small" />
@@ -139,13 +136,13 @@ export default function Layout({ children }: PropsWithChildren) {
           })}
         </div>
       </div>
-      <div className="flex flex-1 overflow-y-auto ">
+      <div className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-3">
         {children}
-        <div className="hidden md:block flex-1">
+        <div className="hidden lg:block flex-1">
           <Sidebar />
         </div>
       </div>
-      <div className="md:hidden  flex justify-evenly items-center border-t-[1px] border-solid  border-primary-border ">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-primary-background  flex justify-evenly items-center border-t-[1px] border-solid  border-primary-border ">
         {routes.map((route) => {
           const { Icon, title, url, onClick } = route;
           if (!url && onClick) {

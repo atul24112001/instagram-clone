@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootStateType } from "../../redux/store";
 import Button from "../helper/Button";
-import Avatar from "../helper/Avatar";
+import ListItem from "../helper/ListItem";
 
 const users = [
   {
@@ -18,30 +18,26 @@ function Sidebar() {
   const user = useSelector((state: RootStateType) => state.authReducer.user);
   return (
     <div className="px-4 pt-10 pb-4">
-      <div className="flex items-center gap-4 mb-4">
-        <Avatar />
-        <div className="flex-1">
-          <div className="font-bold">{user?.name}</div>
-          <div className="text-secondary-text">{user?.email}</div>
-        </div>
-        <Button variant="text">Logout</Button>
-      </div>
+      {user && <ListItem title={user.name} subTitle={user.email} />}
       <div>
         <div className="font-bold text-secondary-text">Suggested User</div>
-
         <div className="pt-4">
           {users.map((us) => {
             return (
-              <div key={us.email} className="flex items-center gap-4 mb-4">
-                <Avatar />
-                <div className="flex-1">
-                  <div className="font-bold">{us?.name}</div>
-                  <div className="text-secondary-text text-sm">{us?.email}</div>
-                </div>
-                <Button size="small" variant="text">
-                  Follow
-                </Button>
-              </div>
+              <ListItem
+                subTitle={
+                  us?.email.length > 10
+                    ? `${us?.email?.substring(0, 9)}...`
+                    : us?.email
+                }
+                title={us?.name}
+                key={us.email}
+                tail={
+                  <Button size="small" variant="text">
+                    Follow
+                  </Button>
+                }
+              />
             );
           })}
         </div>

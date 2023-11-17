@@ -8,6 +8,9 @@ import { useEffect } from "react";
 import { authenticate } from "./redux/auth/authSlice";
 import Layout from "./components/layout";
 import Home from "./components/home";
+import Search from "./components/search";
+import Notifications from "./components/notification";
+import Profile from "./components/profile";
 
 const VERIFY_USER = gql`
   query VerifyUser {
@@ -44,8 +47,9 @@ export default function App() {
         <Layout>
           <Routes>
             <Route path="/" Component={Home} />
-            <Route path="/profile" element={<div>profile</div>} />
-            <Route path="/search" element={<div>search</div>} />
+            <Route path="/profile" Component={Profile} />
+            <Route path="/search" Component={Search} />
+            <Route path="/notifications" Component={Notifications} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Layout>
