@@ -1,7 +1,7 @@
 import { Search as SearchIcon, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import Loader from "../helper/loader/Loader";
-import { User } from "../../redux/auth/authSlice";
+// import { User } from "../../redux/auth/authSlice";
 import ListItem from "../helper/ListItem";
 
 export default function Search() {
