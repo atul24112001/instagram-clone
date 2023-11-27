@@ -28,54 +28,53 @@ if [[ "$git_output" == *"Already up to date"* ]]; then
     exit 0
 fi
 
+ # backend
+echo "Running backend build"
 
-if [[ "$git_output" == *"server/"* ]]; then
-  # backend
-  echo "Running backend build"
+for PORT in "${BACKEND_PORTS[@]}"
+do 
+    docker stop $BACKEND_IMAGE_NAME-$PORT
+    docker rm $BACKEND_IMAGE_NAME-$PORT
+done
 
-  for PORT in "${BACKEND_PORTS[@]}"
-  do 
-      docker stop $BACKEND_IMAGE_NAME-$PORT
-      docker rm $BACKEND_IMAGE_NAME-$PORT
-  done
+cd ~/instagram-clone/server
+pwd
+docker rmi atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG
+docker build -t atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG .
 
-  cd ~/instagram-clone/server
-  pwd
-  docker rmi atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG
-  docker build -t atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG .
-  
-  if [ $? -eq 0 ]; then
-    echo "Docker image atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG built successfully."
-  else
-    echo "Docker image build failed."
-    exit 1
-  fi
-
-
-  for PORT in "${BACKEND_PORTS[@]}"
-  do
-    echo $PORT
-    docker run -e DATABASE_URL=$DATABASE_URL/$DATABASE_NAME --name $BACKEND_IMAGE_NAME-$PORT --network $DATABASE_NETWORK -d -p $PORT:8000 atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG
-  done
+if [ $? -eq 0 ]; then
+  echo "Docker image atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG built successfully."
+else
+  echo "Docker image build failed."
+  exit 1
 fi
+
+
+for PORT in "${BACKEND_PORTS[@]}"
+do
+  echo $PORT
+  docker run -e DATABASE_URL=$DATABASE_URL/$DATABASE_NAME --name $BACKEND_IMAGE_NAME-$PORT --network $DATABASE_NETWORK -d -p $PORT:8000 atul24112001/$BACKEND_IMAGE_NAME:$IMAGE_TAG
+done
 
 # Front-end
-if [[ "$git_output" == *"client/"* ]]; then 
-  cd ~/instagram-clone/client
-  docker stop $FRONTEND_IMAGE_NAME
-  docker rm $FRONTEND_IMAGE_NAME
-  docker rmi atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
-  docker build -t atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG .
+# if [[ "$git_output" == *"client/"* ]]; then 
+  
+# fi
+
+cd ~/instagram-clone/client
+docker stop $FRONTEND_IMAGE_NAME
+docker rm $FRONTEND_IMAGE_NAME
+docker rmi atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
+docker build -t atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG .
 
 
-  if [ $? -eq 0 ]; then
-    echo "Docker image atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG built successfully."
-  else
-    echo "Docker image build failed."
-    exit 1
-  fi
-
-  docker run --name $FRONTEND_IMAGE_NAME -d -p $FRONTEND_PORT:3000 atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
+if [ $? -eq 0 ]; then
+  echo "Docker image atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG built successfully."
+else
+  echo "Docker image build failed."
+  exit 1
 fi
+
+docker run --name $FRONTEND_IMAGE_NAME -d -p $FRONTEND_PORT:3000 atul24112001/$FRONTEND_IMAGE_NAME:$IMAGE_TAG
 
 echo "Build Completed."
