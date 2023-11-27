@@ -5,6 +5,11 @@ import { Heart, HomeIcon, Plus, Search, User } from "lucide-react";
 import Sidebar from "./Sidebar";
 import CreatePost from "../create-post/CreatePost";
 import Model from "../helper/Model";
+import { useQuery } from "@apollo/client";
+import { INITIAL_DATA } from "../../graphql/authenticated";
+import Loader from "../helper/loader/Loader";
+import { useDispatch } from "react-redux";
+import { addPosts, addSuggestedUsers } from "../../redux/data/dataSlice";
 
 const rootVariables: { [key: string]: string } = {
   "--primary-background": "0, 0, 0",
@@ -15,13 +20,28 @@ const rootVariables: { [key: string]: string } = {
 };
 
 export default function Layout({ children }: PropsWithChildren) {
+  const { data, loading } = useQuery(INITIAL_DATA);
+
   const [openCreatePostModel, setOpenCreatePostModel] = useState(false);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     document.title = "Instagram";
     for (const key in rootVariables) {
       document.documentElement.style.setProperty(key, rootVariables[key] ?? "");
     }
   }, []);
+
+  useEffect(() => {
+    if (!loading && data.getInitialData) {
+      dispatch(addPosts(data.getInitialData.posts));
+      dispatch(addSuggestedUsers(data.getInitialData.suggestedUsers));
+    }
+  }, [loading]);
+
+  const toggleCreatePostForm = () => {
+    setOpenCreatePostModel(false);
+  };
 
   const routes = useMemo(() => {
     return [
@@ -97,7 +117,13 @@ export default function Layout({ children }: PropsWithChildren) {
         </div>
       </div>
       <div className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-3">
-        {children}
+        {loading ? (
+          <div className="flex-[2] col-span-2  lg:mt-10">
+            <Loader />
+          </div>
+        ) : (
+          children
+        )}
         <div className="hidden lg:block flex-1">
           <Sidebar />
         </div>
@@ -138,13 +164,8 @@ export default function Layout({ children }: PropsWithChildren) {
         })}
       </div>
 
-      <Model
-        onCancel={() => {
-          setOpenCreatePostModel(false);
-        }}
-        open={openCreatePostModel}
-      >
-        <CreatePost />
+      <Model onCancel={toggleCreatePostForm} open={openCreatePostModel}>
+        <CreatePost onDone={toggleCreatePostForm} />
       </Model>
     </div>
   );

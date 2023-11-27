@@ -41,7 +41,7 @@ class PostService {
   public static async createPost(
     context: Context,
     caption: string,
-    assets: AssetPayload[]
+    assetsString: string
   ) {
     const { currentUser } = context;
     if (!currentUser) {
@@ -55,31 +55,40 @@ class PostService {
       },
     });
 
-    let uploadedAssets: Asset[] = [];
-    for (let asset of assets) {
-      const newAsset = await prisma.asset.create({
-        data: {
-          type: "image",
-          userId: currentUser.id,
-          postId: post.id,
-        },
-      });
-      const params = {
-        Key: `post/${newAsset.id}`,
-        Bucket: process.env.S3_BUCKET_NAME as string,
-        ContentType: asset.type,
-        Body: asset.url,
-      };
-      s3.upload(params, (err: Error, data: ManagedUpload.SendData) => {
-        if (err) {
-          throw Error(err.message);
-        } else {
-          console.log("Image uploaded successfully. S3 URL:", data.Location);
-        }
-      });
-      uploadedAssets.push(newAsset);
-    }
+    const assets = JSON.parse(assetsString);
 
+    let uploadedAssets: Asset[] = [];
+    if (
+      Array.isArray(assets) &&
+      assets.length > 0 &&
+      typeof assets[0] == "object"
+    ) {
+      for (let asset of assets) {
+        const newAsset = await prisma.asset.create({
+          data: {
+            type: "image",
+            userId: currentUser.id,
+            postId: post.id,
+          },
+        });
+        const params = {
+          Key: `post/${newAsset.id}`,
+          Bucket: process.env.S3_BUCKET_NAME as string,
+          ContentType: asset.type,
+          Body: Buffer.from(
+            asset.url.replace(/^data:image\/\w+;base64,/, ""),
+            "base64"
+          ),
+        };
+        s3.upload(params, (err: Error, data: ManagedUpload.SendData) => {
+          if (err) {
+            console.log(err);
+            new GraphQLError(err.message);
+          }
+        });
+        uploadedAssets.push(newAsset);
+      }
+    }
     return {
       post: {
         ...post,

@@ -1,13 +1,16 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authSlice, { InitialAuthState } from "./auth/authSlice";
+import authReducer from "./auth/authSlice";
+import { dataReducer } from "./data/dataSlice";
 
 export type RootStateType = {
   authReducer: InitialAuthState;
+  dataReducer: InitialDataState;
 };
 
 const store = configureStore({
   reducer: combineReducers({
-    authReducer: authSlice,
+    authReducer: authReducer,
+    dataReducer: dataReducer,
   }),
 });
 

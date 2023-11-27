@@ -7,7 +7,7 @@ type Props = {
 function Avatar({ size = "medium" }: Props) {
   return (
     <div
-      className={`rounded-full bg-secondary-background ${
+      className={`rounded-full bg-secondary-background cursor-pointer ${
         size == "small" ? "p-2" : size == "large" ? "p-4" : "p-3"
       }`}
     >

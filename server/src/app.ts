@@ -4,6 +4,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import getGraphqlServer from "./graphql";
 import { context } from "./utils/context";
+import { assetRouter } from "./rest/routes";
 // import { initKafka } from "./kafka";
 
 async function startServer() {
@@ -13,7 +14,7 @@ async function startServer() {
   app.use(express.json({ limit: "10mb" }));
   app.use(cors());
 
-//  await initKafka();
+  //  await initKafka();
   const server = await getGraphqlServer();
 
   app.use(
@@ -23,6 +24,7 @@ async function startServer() {
     })
   );
 
+  app.use("/asset", assetRouter);
   app.use("/", (req: Request, res: Response) => {
     res.send(`<h1>Instagram server is up and running: ${req.ip} </h1>`);
   });

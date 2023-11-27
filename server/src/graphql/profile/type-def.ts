@@ -1,5 +1,6 @@
 export const typeDefs = `#graphql
     type InitialData {
-        SuggestedUser: [User]
+        suggestedUsers: [User]
+        posts: [Post]
     }
 `;

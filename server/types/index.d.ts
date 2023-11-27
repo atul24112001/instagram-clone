@@ -30,3 +30,11 @@ enum AssetType {
   image,
   mp4,
 }
+
+declare global {
+  namespace Express {
+    interface Request {
+      currentUser: User;
+    }
+  }
+}

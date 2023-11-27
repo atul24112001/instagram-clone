@@ -4,7 +4,7 @@ import Logo from "../helper/Logo";
 import TextField from "../helper/TextField";
 import Button from "../helper/Button";
 import { useMutation } from "@apollo/client";
-import { LOGIN_USER, SIGNUP_USER } from "../../graphql/query";
+import { LOGIN_USER, SIGNUP_USER } from "../../graphql";
 import { useDispatch } from "react-redux";
 import { authenticate } from "../../redux/auth/authSlice";
 

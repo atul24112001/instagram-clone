@@ -2,8 +2,9 @@ export const typeDefs = `#graphql
     type Post {
         id: String!
         caption: String!
-        userId: String!
+        userId: String
         assets: [Asset]
+        user: User
    }
 
    type Asset {

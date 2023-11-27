@@ -112,7 +112,6 @@ class UserService {
   }
 
   public static async verifyUser(context: any) {
-    console.log("Verifying", context);
     if (!context.currentUser) {
       throw new GraphQLError("Verification failed.", {
         extensions: {

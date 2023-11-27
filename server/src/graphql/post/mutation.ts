@@ -1,3 +1,3 @@
 export const mutation = `#graphql
-   createPost(caption: String!, assets: [AssetPayloadInput]): CreatePostResponse,
+   createPost(caption: String!, assets: String!): CreatePostResponse,
 `;

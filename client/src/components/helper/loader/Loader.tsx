@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './loader.module.css';
+import React from "react";
+import styles from "./loader.module.css";
 
 type Props = {
   color?: string;
@@ -7,10 +7,9 @@ type Props = {
   message?: string;
 };
 
-
 const Loader = ({
-  color = 'var(--main)',
-  width = '200',
+  color = "rgb(var(--primary-button))",
+  width = "200",
   message,
 }: Props): React.ReactElement => {
   return (
@@ -47,7 +46,7 @@ const Loader = ({
       </svg>
       {message && <span className={styles.message}>{message}</span>}
     </div>
-  )
-}
+  );
+};
 
-export default Loader
+export default Loader;

@@ -7,18 +7,26 @@ import {
   MoreHorizontal,
   Send,
 } from "lucide-react";
+import { API_URL } from "../../apolloClient";
 
-function Post() {
+type Props = {
+  caption: string;
+  user: User;
+  assets: PostAsset[];
+};
+
+function Post({ caption, user, assets }: Props) {
   const [showCaption, setShowCaption] = useState(false);
-  const comment = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam ex eligendi, velit repellendus exercitationem laborum ipsam sint sunt impedit quidem?  sit amet consectetur adipisicing elit. Aliquam ex eligendi, velit repellendus exercitationem laborum ipsam sint sunt impedit quidem?`;
   return (
     <div className="max-w-md  mb-4 w-full">
       <div className="flex p-1 md:px-0 items-center gap-2">
         <Avatar size="small" />
-        <div className="text-xs font-bold flex-1">RVCJMedia</div>
+        <div className="text-xs font-bold flex-1 cursor-pointer">
+          {user.name}
+        </div>
         <MoreHorizontal />
       </div>
-      <img src="/sample.jpg" />
+      <img src={`${API_URL}/asset/${assets[0].id}`} />
       <div className="flex p-2 md:px-0">
         <div className="flex gap-2 flex-1">
           <Heart className="cursor-pointer hover:opacity-50" />
@@ -30,14 +38,14 @@ function Post() {
       <div className="text-sm font-bold p-2 md:p-0">
         <div>0 Likes</div>
         <div>
-          RVCJMedia{" "}
+          {user.name}{" "}
           <span className="font-normal">
-            {comment.length > 50 && !showCaption
-              ? `${comment.substring(0, 50)}`
-              : comment}
+            {caption.length > 50 && !showCaption
+              ? `${caption.substring(0, 50)}`
+              : caption}
           </span>
         </div>
-        {comment.length > 50 ? (
+        {caption.length > 50 ? (
           <div
             onClick={() => setShowCaption((prev: boolean) => !prev)}
             className="text-secondary-text cursor-pointer"

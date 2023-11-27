@@ -2,18 +2,21 @@ import { ChangeEvent, useRef, useState } from "react";
 import { ArrowLeft, ChevronLeft, ChevronRight, Upload } from "lucide-react";
 import Button from "../helper/Button";
 import { base64 } from "../helper/func";
+import { useMutation } from "@apollo/client";
+import { CREATE_POST } from "../../graphql/authenticated";
 
-type Asset = {
-  url: string;
-  type: string;
+type Props = {
+  onDone: () => void;
 };
 
-export default function CreatePost() {
+export default function CreatePost({ onDone }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loadingImages, setLoadingImages] = useState(false);
-  const [selectedImages, setSelectedImages] = useState<Asset[]>([]);
+  const [selectedImages, setSelectedImages] = useState<AssetType[]>([]);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [caption, setCaption] = useState("");
+
+  const [createPost, createPostState] = useMutation(CREATE_POST);
 
   const chooseFileHandler = () => {
     if (inputRef.current) {
@@ -24,7 +27,7 @@ export default function CreatePost() {
   const selectedFileHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     setLoadingImages(true);
     try {
-      const selectedFiles: Asset[] = [];
+      const selectedFiles: AssetType[] = [];
       for (const file of e.target.files ?? []) {
         const url = await base64(file);
         if (typeof url == "string") {
@@ -46,11 +49,21 @@ export default function CreatePost() {
     setCaption(e.target.value ?? "");
   };
 
-  const postHandler = () => {
-    console.log({
-      assets: selectedImages,
-      caption,
-    });
+  const postHandler = async () => {
+    try {
+      const response = await createPost({
+        variables: {
+          caption,
+          assets: JSON.stringify(selectedImages),
+        },
+      });
+      console.log(response.data);
+      onDone();
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+    }
   };
 
   return (
@@ -64,7 +77,11 @@ export default function CreatePost() {
                 setSelectedImages([]);
               }}
             />
-            <Button variant="text" onClick={postHandler}>
+            <Button
+              loading={createPostState.loading}
+              variant="text"
+              onClick={postHandler}
+            >
               Post
             </Button>
           </>
@@ -85,7 +102,7 @@ export default function CreatePost() {
                 className="absolute top-1/2 left-2 -translate-y-1/2 cursor-pointer bg-secondary-background rounded-full"
               />
             )}
-            {selectedImages.map((image: Asset, index: number) => {
+            {selectedImages.map((image: AssetType, index: number) => {
               return (
                 <img
                   className={

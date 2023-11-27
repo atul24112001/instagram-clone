@@ -12,6 +12,13 @@ import Search from "./components/search";
 import Notifications from "./components/notification";
 import Profile from "./components/profile";
 
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+
+if (import.meta.env.DEV) {
+  loadDevMessages();
+  loadErrorMessages();
+}
+
 const VERIFY_USER = gql`
   query VerifyUser {
     verifyUser {
