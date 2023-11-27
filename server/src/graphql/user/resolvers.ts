@@ -1,8 +1,8 @@
-import UserService, { CreateUserPayload } from "../../services/user";
-import { hashText, prisma } from "../../utils/functions";
+import UserService from "../../services/user";
+import { Context, CreateUserPayload } from "../../../types";
 
 const queries = {
-  verifyUser: async (p1: any, p2: {}, context: any) => {
+  verifyUser: async (p1: any, p2: {}, context: Context) => {
     return await UserService.verifyUser(context);
   },
 };

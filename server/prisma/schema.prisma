@@ -8,74 +8,78 @@ datasource db {
 }
 
 model user {
-  id             String          @id @default(uuid())
-  name           String
-  email          String          @unique
-  password       String
-  token          String?
-  isLogin        Boolean         @default(false)
-  updateAt       DateTime        @default(now()) @updatedAt @map("updated_at")
-  createdAt      DateTime        @default(now()) @map("created_at")
-  profile        profile[]
-  user_followers user_follower[]
+  id          String        @id @default(uuid())
+  name        String
+  email       String        @unique
+  password    String
+  token       String?
+  isLogin     Boolean       @default(false)
+  updateAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  post        post[]
+  user_follow user_follow[]
+  asset       asset[]
 
   @@map("users")
 }
 
-model profile {
-  id             String          @id @default(uuid())
-  user           user            @relation(fields: [userId], references: [id])
-  profileImage   String?         @map("profile_image")
-  updateAt       DateTime        @default(now()) @updatedAt @map("updated_at")
-  createdAt      DateTime        @default(now()) @map("created_at")
-  userId         String          @unique @map("user_id")
-  user_followers user_follower[]
-  post           post[]
+// model profile {
+//   id             String          @id @default(uuid())
+//   user           user            @relation(fields: [userId], references: [id])
+//   profileImage   String?         @map("profile_image")
+//   updateAt       DateTime        @default(now()) @updatedAt @map("updated_at")
+//   createdAt      DateTime        @default(now()) @map("created_at")
+//   userId         String          @unique @map("user_id")
+//   user_followers user_follower[]
+//   post           post[]
 
-  @@map("profiles")
-}
-
-// model user_follow {
-//   id        String   @id @default(uuid())
-//   user      user     @relation(fields: [userId], references: [id])
-//   follow    String
-//   updateAt  DateTime @default(now()) @updatedAt @map("updated_at")
-//   createdAt DateTime @default(now()) @map("created_at")
-//   userId    String
+//   @@map("profiles")
 // }
 
-model user_follower {
+model user_follow {
   id        String   @id @default(uuid())
-  follower  user     @relation(fields: [userId], references: [id])
-  follows   profile  @relation(fields: [profileId], references: [id])
+  user      user     @relation(fields: [userId], references: [id])
+  follow    String
   updateAt  DateTime @default(now()) @updatedAt @map("updated_at")
   createdAt DateTime @default(now()) @map("created_at")
   userId    String
-  profileId String
 
-  @@map("user_follwers")
+  @@map("user_follows")
 }
+
+// model user_follower {
+//   id        String   @id @default(uuid())
+//   follower  user     @relation(fields: [userId], references: [id])
+//   follows   profile  @relation(fields: [profileId], references: [id])
+//   updateAt  DateTime @default(now()) @updatedAt @map("updated_at")
+//   createdAt DateTime @default(now()) @map("created_at")
+//   userId    String
+//   profileId String
+
+//   @@map("user_follwers")
+// }
 
 model post {
   id        String   @id @default(uuid())
-  profile   profile  @relation(fields: [profileId], references: [id])
-  caption   String?
+  user      user     @relation(fields: [userId], references: [id])
+  caption   String   @default("")
   assets    asset[]
   updateAt  DateTime @default(now()) @updatedAt @map("updated_at")
   createdAt DateTime @default(now()) @map("created_at")
-  profileId String   @map("profile_id")
+  userId    String
 
   @@map("posts")
 }
 
 model asset {
   id        String    @id @default(uuid())
-  url       String
   type      AssetType
+  user      user      @relation(fields: [userId], references: [id])
   updateAt  DateTime  @default(now()) @updatedAt @map("updated_at")
   createdAt DateTime  @default(now()) @map("created_at")
   post      post?     @relation(fields: [postId], references: [id])
   postId    String?   @map("post_id")
+  userId    String
 }
 
 enum AssetType {

@@ -4,6 +4,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import getGraphqlServer from "./graphql";
 import { context } from "./utils/context";
+// import { initKafka } from "./kafka";
 
 async function startServer() {
   const app = express();
@@ -12,7 +13,9 @@ async function startServer() {
   app.use(express.json({ limit: "10mb" }));
   app.use(cors());
 
+//  await initKafka();
   const server = await getGraphqlServer();
+
   app.use(
     "/graphql",
     expressMiddleware(server, {

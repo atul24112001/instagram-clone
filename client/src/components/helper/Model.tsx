@@ -19,7 +19,7 @@ export default function Model({
       <X className="absolute right-4 cursor-pointer top-4" />
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-secondary-background rounded-lg max-h-screen  overflow-y-auto md:h-auto w-5/6 lg:w-1/3 "
+        className="bg-secondary-background  md:rounded-lg max-h-screen  overflow-y-auto h-screen w-screen  md:h-auto md:w-5/6 lg:w-1/3 "
       >
         {children}
       </div>

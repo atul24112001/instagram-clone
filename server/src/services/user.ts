@@ -1,19 +1,11 @@
 import { GraphQLError } from "graphql";
-import {
-  getToken,
-  hashText,
-  prisma,
-  verifyHash,
-  verifyToken,
-} from "../utils/functions";
-
-export interface CreateUserPayload {
-  email: string;
-  password: string;
-  name: string;
-}
+import { getToken, hashText, prisma, verifyHash } from "../utils/functions";
+import { CreateUserPayload } from "../../types";
 
 class UserService {
+  private static async checkAuth() {
+    return async () => {};
+  }
   public static async createUser(payload: CreateUserPayload) {
     const { email, name, password } = payload;
     const hashedPassword = await hashText(password);
@@ -51,11 +43,6 @@ class UserService {
       },
     });
 
-    await prisma.profile.create({
-      data: {
-        userId: user.id,
-      },
-    });
     return {
       message: "Sign up successfully!",
       token,

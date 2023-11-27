@@ -1,9 +1,5 @@
-import { User } from "../types";
+import { Context } from "../../types";
 import { prisma, verifyToken } from "./functions";
-
-type Context = {
-  currentUser: null | User;
-};
 
 export const context = async ({ req }: any) => {
   const ctx: Context = {
