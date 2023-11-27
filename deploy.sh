@@ -23,10 +23,10 @@ else
     exit 1
 fi
 
-if [[ "$git_output" == *"Already up to date"* ]]; then
-    echo "No changes in the repository."
-    exit 0
-fi
+# if [[ "$git_output" == *"Already up to date"* ]]; then
+#     echo "No changes in the repository."
+#     exit 0
+# fi
 
  # backend
 echo "Running backend build"
