@@ -15,14 +15,16 @@ class ProfileServices {
     });
     const suggestedUsers = await prisma.user.findMany({
       where: {
-        id: { notIn: followedUsers.map((usr) => usr.id) },
+        id: { notIn: followedUsers.map((usr: any) => usr.id) },
       },
       take: 4,
     });
 
     const posts = await prisma.post.findMany({
       where: {
-        userId: { in: [currentUser.id, ...followedUsers.map((usr) => usr.id)] },
+        userId: {
+          in: [currentUser.id, ...followedUsers.map((usr: any) => usr.id)],
+        },
       },
       take: 25,
       skip: 0,

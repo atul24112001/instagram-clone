@@ -23,7 +23,9 @@ class PostService {
 
     const posts = await prisma.post.findMany({
       where: {
-        userId: { in: [currentUser.id, ...followedUsers.map((usr) => usr.id)] },
+        userId: {
+          in: [currentUser.id, ...followedUsers.map((usr: any) => usr.id)],
+        },
       },
       include: {
         assets: true,
