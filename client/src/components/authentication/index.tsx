@@ -17,7 +17,7 @@ export default function Authentication() {
     name: "",
     email: "",
     password: "",
-    username: "",
+    userName: "",
   });
 
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ export default function Authentication() {
       (details.password.length > 5 &&
         details.email.length > 10 &&
         details.name.length > 3 &&
-        details.username.length > 6)
+        details.userName.length > 6)
     ) {
       return false;
     }
@@ -87,6 +87,7 @@ export default function Authentication() {
               name: target.name ?? "",
               email: target.email ?? "",
               id: target.id ?? "",
+              userName: target.userName ?? "",
             },
             token: target.token,
           })
@@ -137,7 +138,7 @@ export default function Authentication() {
                 onChange={changeHandler}
                 name="username"
                 placeholder="User Name"
-                value={details.username}
+                value={details.userName}
               />
             </>
           )}

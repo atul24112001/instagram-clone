@@ -4,6 +4,8 @@ import Button from "../helper/Button";
 import { base64 } from "../helper/func";
 import { useMutation } from "@apollo/client";
 import { CREATE_POST } from "../../graphql/authenticated";
+import { useDispatch } from "react-redux";
+import { addPost } from "../../redux/data/dataSlice";
 
 type Props = {
   onDone: () => void;
@@ -17,6 +19,8 @@ export default function CreatePost({ onDone }: Props) {
   const [caption, setCaption] = useState("");
 
   const [createPost, createPostState] = useMutation(CREATE_POST);
+
+  const dispatch = useDispatch();
 
   const chooseFileHandler = () => {
     if (inputRef.current) {
@@ -57,7 +61,7 @@ export default function CreatePost({ onDone }: Props) {
           assets: JSON.stringify(selectedImages),
         },
       });
-      console.log(response.data);
+      dispatch(addPost(response.data.createPost.post));
       onDone();
     } catch (error) {
       if (error instanceof Error) {

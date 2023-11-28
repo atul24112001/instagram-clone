@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import AWS from "aws-sdk";
 import { Kafka } from "kafkajs";
 import { Request, Response } from "express";
+import sharp from "sharp";
 
 const broker = process.env.KAFKA_HOST as string;
 
@@ -17,8 +18,9 @@ export const prisma = new PrismaClient();
 export const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
-  endpoint: process.env.STORAGE_ENDPOINT,
-  s3BucketEndpoint: true,
+  region: process.env.AWS_S3_REGION,
+  // endpoint: process.env.STORAGE_ENDPOINT,
+  // s3BucketEndpoint: true,
 });
 
 export const hashText = async (text: string) => {
@@ -63,3 +65,6 @@ export async function dbError(res: Response, error: any, status: number = 500) {
   });
   return;
 }
+export const downgradeImage = async (input: Buffer) => {
+  return sharp(input).jpeg({ quality: 10 }).toBuffer();
+};

@@ -15,6 +15,12 @@ const dataSlice = createSlice({
         posts: [...state.posts, ...action.payload],
       };
     },
+    addPost: (state, action) => {
+      return {
+        ...state,
+        posts: [action.payload, ...state.posts],
+      };
+    },
     addSuggestedUsers: (state, action) => {
       return {
         ...state,
@@ -25,4 +31,4 @@ const dataSlice = createSlice({
 });
 
 export const dataReducer = dataSlice.reducer;
-export const { addPosts, addSuggestedUsers } = dataSlice.actions;
+export const { addPosts, addSuggestedUsers, addPost } = dataSlice.actions;

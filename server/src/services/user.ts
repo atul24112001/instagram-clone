@@ -7,7 +7,7 @@ class UserService {
     return async () => {};
   }
   public static async createUser(payload: CreateUserPayload) {
-    const { email, name, password } = payload;
+    const { email, name, password, userName } = payload;
     const hashedPassword = await hashText(password);
 
     const emailIsNoUnique = await this.getUserById(email);
@@ -24,6 +24,7 @@ class UserService {
       data: {
         email,
         name,
+        userName,
         password: hashedPassword,
       },
     });
@@ -123,6 +124,7 @@ class UserService {
       id: context.currentUser.id,
       name: context.currentUser.name,
       email: context.currentUser.email,
+      useName: context.currentUser.userName,
     };
   }
 

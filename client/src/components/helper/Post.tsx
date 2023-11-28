@@ -8,6 +8,8 @@ import {
   Send,
 } from "lucide-react";
 import { API_URL } from "../../apolloClient";
+import Image from "./Image";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   caption: string;
@@ -17,16 +19,29 @@ type Props = {
 
 function Post({ caption, user, assets }: Props) {
   const [showCaption, setShowCaption] = useState(false);
+  const navigate = useNavigate();
+  const viewProfile = () => {
+    navigate(user.userName);
+  };
+
   return (
     <div className="max-w-md  mb-4 w-full">
       <div className="flex p-1 md:px-0 items-center gap-2">
-        <Avatar size="small" />
-        <div className="text-xs font-bold flex-1 cursor-pointer">
-          {user.name}
+        <Avatar onClick={viewProfile} size="small" />
+        <div
+          onClick={viewProfile}
+          className="text-sm font-bold flex-1 cursor-pointer"
+        >
+          {user.userName}
         </div>
-        <MoreHorizontal />
+        <MoreHorizontal className="cursor-pointer" />
       </div>
-      <img src={`${API_URL}/asset/${assets[0].id}`} />
+      <div className="min-h-[150px]">
+        <Image
+          // alt={}
+          src={`${API_URL}/asset/${assets[0].id}`}
+        />
+      </div>
       <div className="flex p-2 md:px-0">
         <div className="flex gap-2 flex-1">
           <Heart className="cursor-pointer hover:opacity-50" />

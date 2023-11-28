@@ -2,11 +2,13 @@ import { User } from "lucide-react";
 
 type Props = {
   size?: "small" | "medium" | "large";
+  onClick?: () => void;
 };
 
-function Avatar({ size = "medium" }: Props) {
+function Avatar({ size = "medium", onClick }: Props) {
   return (
     <div
+      onClick={onClick}
       className={`rounded-full bg-secondary-background cursor-pointer ${
         size == "small" ? "p-2" : size == "large" ? "p-4" : "p-3"
       }`}

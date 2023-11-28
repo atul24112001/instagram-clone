@@ -6,15 +6,27 @@ export const VERIFY_USER = gql`
       id
       name
       email
+      userName
     }
   }
 `;
 
 export const LOGIN_USER = gql`
-  mutation Login($name: String!, $email: String!, $password: String!) {
-    login(name: $name, email: $email, password: $password) {
+  mutation Login(
+    $name: String!
+    $email: String!
+    $password: String!
+    $userName: String!
+  ) {
+    login(
+      name: $name
+      email: $email
+      password: $password
+      userName: $userName
+    ) {
       message
       name
+      userName
       email
       id
       token
@@ -23,10 +35,21 @@ export const LOGIN_USER = gql`
 `;
 
 export const SIGNUP_USER = gql`
-  mutation CreateUser($name: String!, $email: String!, $password: String!) {
-    createUser(name: $name, email: $email, password: $password) {
+  mutation CreateUser(
+    $name: String!
+    $email: String!
+    $password: String!
+    $userName: String!
+  ) {
+    createUser(
+      name: $name
+      email: $email
+      password: $password
+      userName: $userName
+    ) {
       message
       name
+      userName
       email
       id
       token

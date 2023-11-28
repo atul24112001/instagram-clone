@@ -3,7 +3,7 @@ import { RootStateType } from "./redux/store";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Authentication from "./components/authentication";
 
-import { gql, useQuery } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
 import { useEffect } from "react";
 import { authenticate } from "./redux/auth/authSlice";
 import Layout from "./components/layout";
@@ -13,6 +13,7 @@ import Notifications from "./components/notification";
 import Profile from "./components/profile";
 
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+// import { VERIFY_USER } from "./graphql";
 
 if (import.meta.env.DEV) {
   loadDevMessages();
@@ -25,6 +26,7 @@ const VERIFY_USER = gql`
       id
       name
       email
+      userName
     }
   }
 `;
@@ -50,6 +52,12 @@ export default function App() {
 
   return (
     <div>
+      {!import.meta.env.DEV && (
+        <div className="text-center bg-primary-background text-primary-text pt-1">
+          This Project is Currently in-progress
+        </div>
+      )}
+
       {isAuthenticated ? (
         <Layout>
           <Routes>
@@ -57,6 +65,7 @@ export default function App() {
             <Route path="/profile" Component={Profile} />
             <Route path="/search" Component={Search} />
             <Route path="/notifications" Component={Notifications} />
+            <Route path="/:userName" Component={Profile} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Layout>

@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql";
-import { prisma, s3 } from "../utils/functions";
+import { downgradeImage, prisma, s3 } from "../utils/functions";
 import { ManagedUpload } from "aws-sdk/clients/s3";
 import { Asset, Context } from "../../types";
 
@@ -53,6 +53,9 @@ class PostService {
         caption,
         userId: currentUser.id,
       },
+      include: {
+        user: true,
+      },
     });
 
     const assets = JSON.parse(assetsString);
@@ -71,21 +74,28 @@ class PostService {
             postId: post.id,
           },
         });
+
+        const bodyBufferOriginal = Buffer.from(
+          asset.url.replace(/^data:image\/\w+;base64,/, ""),
+          "base64"
+        );
+
+        const bodyBufferLow = await downgradeImage(bodyBufferOriginal);
         const params = {
           Key: `post/${newAsset.id}`,
           Bucket: process.env.S3_BUCKET_NAME as string,
           ContentType: asset.type,
-          Body: Buffer.from(
-            asset.url.replace(/^data:image\/\w+;base64,/, ""),
-            "base64"
-          ),
+          Body: bodyBufferOriginal,
         };
-        s3.upload(params, (err: Error, data: ManagedUpload.SendData) => {
-          if (err) {
-            console.log(err);
-            new GraphQLError(err.message);
-          }
-        });
+        await s3.putObject(params).promise();
+        await s3
+          .putObject({
+            Key: `post/${newAsset.id}-100`,
+            Bucket: process.env.S3_BUCKET_NAME as string,
+            ContentType: asset.type,
+            Body: bodyBufferLow,
+          })
+          .promise();
         uploadedAssets.push(newAsset);
       }
     }

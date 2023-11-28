@@ -6,13 +6,17 @@ export const CREATE_POST = gql`
       post {
         assets {
           type
-          userId
           postId
           id
         }
         caption
         id
-        userId
+        user {
+          id
+          name
+          userName
+          email
+        }
       }
     }
   }
@@ -24,6 +28,7 @@ export const INITIAL_DATA = gql`
       suggestedUsers {
         id
         name
+        userName
         email
       }
       posts {
@@ -32,6 +37,35 @@ export const INITIAL_DATA = gql`
         user {
           id
           name
+          userName
+          email
+        }
+        assets {
+          type
+          postId
+          id
+        }
+      }
+    }
+  }
+`;
+
+export const GET_PROFILE = gql`
+  query GetProfile($userName: String!) {
+    getProfile(userName: $userName) {
+      user {
+        name
+        email
+        id
+        userName
+      }
+      posts {
+        id
+        caption
+        user {
+          id
+          name
+          userName
           email
         }
         assets {

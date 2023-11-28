@@ -2,6 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  userName: string;
   password: string;
   token: string | null;
   isLogin: boolean;
@@ -20,6 +21,7 @@ export interface CreateUserPayload {
   email: string;
   password: string;
   name: string;
+  userName: string;
 }
 
 export interface Context {
