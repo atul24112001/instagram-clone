@@ -59,6 +59,9 @@ export const GET_PROFILE = gql`
         id
         userName
       }
+      followersCount
+      followingCount
+      postsCount
       posts {
         id
         caption
