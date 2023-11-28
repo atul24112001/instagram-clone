@@ -11,7 +11,7 @@ model user {
   id          String        @id @default(uuid())
   name        String
   email       String        @unique
-  userName    String        @unique
+  userName    String        @unique @default("")
   password    String
   token       String?
   isLogin     Boolean       @default(false)
