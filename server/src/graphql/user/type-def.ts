@@ -3,7 +3,7 @@ export const typeDefs = `#graphql
         id: ID!
         name: String!
         email: String!
-        userName: String
+        userName: String!
     }
 
     type AuthResponse {

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootStateType } from "./redux/store";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Authentication from "./components/authentication";
 
 import { useQuery, gql } from "@apollo/client";
@@ -33,6 +33,7 @@ const VERIFY_USER = gql`
 
 export default function App() {
   const { data, loading } = useQuery(VERIFY_USER);
+  const navigate = useNavigate();
 
   const isAuthenticated = useSelector(
     (state: RootStateType) => state.authReducer.isAuthenticated
@@ -47,6 +48,7 @@ export default function App() {
           token: localStorage.getItem("token") ?? "",
         })
       );
+      navigate("/");
     }
   }, [loading, data, dispatch]);
 

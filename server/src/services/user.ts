@@ -49,6 +49,7 @@ class UserService {
       token,
       name,
       email,
+      userName,
       id: user.id,
     };
   }
@@ -57,6 +58,7 @@ class UserService {
     const { email, password } = payload;
     const userExist = await this.getUserById(email);
 
+    console.log(payload);
     if (!userExist) {
       throw new GraphQLError("User Not found, please sign up.", {
         extensions: {
@@ -95,6 +97,7 @@ class UserService {
       token,
       name: userExist.name,
       email,
+      userName: userExist.userName,
       id: userExist.id,
     };
   }
@@ -124,14 +127,11 @@ class UserService {
       id: context.currentUser.id,
       name: context.currentUser.name,
       email: context.currentUser.email,
-      useName: context.currentUser.userName,
+      userName: context.currentUser.userName,
     };
   }
 
   public static async verifyToken(token: string) {
-    // const payload = await verifyToken(token);
-    //  if(ctx)
-
     throw new GraphQLError("Verification failed.", {
       extensions: {
         code: "FORBIDDEN",

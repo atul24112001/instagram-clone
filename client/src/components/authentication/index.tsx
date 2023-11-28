@@ -5,8 +5,8 @@ import TextField from "../helper/TextField";
 import Button from "../helper/Button";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER, SIGNUP_USER } from "../../graphql";
-import { useDispatch } from "react-redux";
-import { authenticate } from "../../redux/auth/authSlice";
+// import { useDispatch } from "react-redux";
+// import { authenticate } from "../../redux/auth/authSlice";
 
 export default function Authentication() {
   const [haveAccount, setHaveAccount] = useState(false);
@@ -20,7 +20,7 @@ export default function Authentication() {
     userName: "",
   });
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     console.log({ value: e.target.value, name: e.target.name });
@@ -81,17 +81,19 @@ export default function Authentication() {
           ? response.data.login
           : response.data.createUser;
         localStorage.setItem("token", target.token);
-        dispatch(
-          authenticate({
-            user: {
-              name: target.name ?? "",
-              email: target.email ?? "",
-              id: target.id ?? "",
-              userName: target.userName ?? "",
-            },
-            token: target.token,
-          })
-        );
+        window.location.reload();
+
+        // dispatch(
+        //   authenticate({
+        //     user: {
+        //       name: target.name ?? "",
+        //       email: target.email ?? "",
+        //       id: target.id ?? "",
+        //       userName: target.userName ?? "",
+        //     },
+        //     token: target.token,
+        //   })
+        // );
       }
     } catch (error) {
       console.log(error);
@@ -136,7 +138,7 @@ export default function Authentication() {
               />
               <TextField
                 onChange={changeHandler}
-                name="username"
+                name="userName"
                 placeholder="User Name"
                 value={details.userName}
               />
