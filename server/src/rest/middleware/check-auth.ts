@@ -42,6 +42,7 @@ export async function checkAuth(
       token: null,
       isLogin: true,
       name: user.name,
+      userName: user.userName,
       password: user.password,
     };
     next();
