@@ -5,6 +5,8 @@ import TextField from "../helper/TextField";
 import Button from "../helper/Button";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER, SIGNUP_USER } from "../../graphql";
+import { useSelector } from "react-redux";
+import { RootStateType } from "../../redux/store";
 // import { useDispatch } from "react-redux";
 // import { authenticate } from "../../redux/auth/authSlice";
 
@@ -20,10 +22,12 @@ export default function Authentication() {
     userName: "",
   });
 
+  const isAuthenticated = useSelector(
+    (state: RootStateType) => state.authReducer.isAuthenticated
+  );
   // const dispatch = useDispatch();
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log({ value: e.target.value, name: e.target.name });
     setDetails((prev) => {
       return {
         ...prev,
@@ -42,6 +46,12 @@ export default function Authentication() {
       setHaveAccount(false);
     }
   }, [pathname]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   const submitDisabled = useMemo(() => {
     if (
@@ -81,6 +91,7 @@ export default function Authentication() {
           ? response.data.login
           : response.data.createUser;
         localStorage.setItem("token", target.token);
+        navigate("/");
         window.location.reload();
 
         // dispatch(

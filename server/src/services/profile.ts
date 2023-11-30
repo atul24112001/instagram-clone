@@ -44,6 +44,68 @@ class ProfileServices {
       posts: posts,
     };
   }
+
+  public static async getProfile(context: Context, userName: string) {
+    const { currentUser } = context;
+    if (!currentUser) {
+      return new GraphQLError("Access Denied");
+    }
+    console.log(userName);
+
+    const targetUser = await prisma.user.findFirst({
+      where: {
+        userName,
+      },
+    });
+    if (!targetUser) {
+      return new GraphQLError("User Not Found");
+    }
+    const [posts, postsCount, followersCount, followingCount] =
+      await prisma.$transaction([
+        prisma.post.findMany({
+          where: {
+            userId: targetUser.id,
+          },
+          include: {
+            assets: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 25,
+          skip: 0,
+        }),
+        prisma.post.count({
+          where: {
+            userId: targetUser.id,
+          },
+        }),
+        prisma.user_follow.count({
+          where: {
+            userId: targetUser.id,
+          },
+        }),
+        prisma.user_follow.count({
+          where: {
+            follow: targetUser.id,
+          },
+        }),
+      ]);
+
+    return {
+      user: {
+        name: targetUser.name,
+        id: targetUser.id,
+        email: targetUser.email,
+        userName: targetUser.userName,
+      },
+
+      followersCount,
+      followingCount,
+      postsCount,
+      posts: posts,
+    };
+  }
 }
 
 export default ProfileServices;

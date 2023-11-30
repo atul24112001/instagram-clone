@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState: InitialDataState = {
   posts: [],
   suggestedUsers: [],
+  profileDetails: null,
 };
 
 const dataSlice = createSlice({
@@ -19,6 +20,18 @@ const dataSlice = createSlice({
       return {
         ...state,
         posts: [action.payload, ...state.posts],
+        profileDetails: state.profileDetails
+          ? {
+              ...state.profileDetails,
+              posts: [action.payload, ...state.profileDetails.posts],
+            }
+          : null,
+      };
+    },
+    setProfileDetails: (state, action) => {
+      return {
+        ...state,
+        profileDetails: action.payload,
       };
     },
     addSuggestedUsers: (state, action) => {
@@ -31,4 +44,5 @@ const dataSlice = createSlice({
 });
 
 export const dataReducer = dataSlice.reducer;
-export const { addPosts, addSuggestedUsers, addPost } = dataSlice.actions;
+export const { addPosts, addSuggestedUsers, addPost, setProfileDetails } =
+  dataSlice.actions;

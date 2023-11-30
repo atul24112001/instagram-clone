@@ -1,3 +1,4 @@
 export const queries = `#graphql
-    getInitialData: InitialData
+    getInitialData: InitialData,
+    getProfile(userName: String!):  ProfileData
 `;

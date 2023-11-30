@@ -2,7 +2,7 @@ import { ImgHTMLAttributes, useState } from "react";
 
 type Props = ImgHTMLAttributes<HTMLImageElement>;
 
-export default function Image({ src, ...rest }: Props) {
+export default function Image({ src, className = "", ...rest }: Props) {
   const [loaded, setLoaded] = useState(false);
   return (
     <div>
@@ -10,7 +10,7 @@ export default function Image({ src, ...rest }: Props) {
         onLoad={() => {
           setLoaded(true);
         }}
-        className={`${loaded ? "block" : "hidden"}`}
+        className={`${loaded ? "block" : "hidden"} ${className}`}
         src={src}
         loading="lazy"
         {...rest}
@@ -19,7 +19,7 @@ export default function Image({ src, ...rest }: Props) {
       <img
         src={`${src}-100`}
         loading="lazy"
-        className={`${!loaded ? "block" : "hidden"}`}
+        className={`${!loaded ? "block" : "hidden"} ${className}`}
         {...rest}
       />
     </div>

@@ -24,9 +24,18 @@ type User = {
   userName: string;
 };
 
+type ProfileDetails = {
+  user: User;
+  posts: Post[];
+  followersCount: number;
+  followingCount: number;
+  postsCount: number;
+};
+
 type InitialDataState = {
   posts: Post[];
   suggestedUsers: User[];
+  profileDetails: ProfileDetails | null;
 };
 
 type InitialAuthState = {

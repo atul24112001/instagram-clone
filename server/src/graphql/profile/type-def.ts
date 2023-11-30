@@ -3,4 +3,12 @@ export const typeDefs = `#graphql
         suggestedUsers: [User]
         posts: [Post]
     }
+
+    type ProfileData {
+        user: User
+        posts: [Post]
+        followersCount:Int!
+      followingCount: Int!
+      postsCount: Int!
+    }
 `;

@@ -5,11 +5,12 @@ import { Heart, HomeIcon, Plus, Search, User } from "lucide-react";
 import Sidebar from "./Sidebar";
 import CreatePost from "../create-post/CreatePost";
 import Model from "../helper/Model";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { INITIAL_DATA } from "../../graphql/authenticated";
 import Loader from "../helper/loader/Loader";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addPosts, addSuggestedUsers } from "../../redux/data/dataSlice";
+import { RootStateType } from "../../redux/store";
 
 const rootVariables: { [key: string]: string } = {
   "--primary-background": "0, 0, 0",
@@ -20,22 +21,33 @@ const rootVariables: { [key: string]: string } = {
 };
 
 export default function Layout({ children }: PropsWithChildren) {
-  const { data, loading } = useQuery(INITIAL_DATA);
+  const [getInitialData, { data, loading }] = useLazyQuery(INITIAL_DATA);
+  const isAuthenticated = useSelector(
+    (state: RootStateType) => state.authReducer.isAuthenticated
+  );
 
   const [openCreatePostModel, setOpenCreatePostModel] = useState(false);
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Instagram";
-    for (const key in rootVariables) {
-      document.documentElement.style.setProperty(key, rootVariables[key] ?? "");
+    console.log("setting root variables", isAuthenticated);
+    if (isAuthenticated) {
+      for (const key in rootVariables) {
+        document.documentElement.style.setProperty(
+          key,
+          rootVariables[key] ?? ""
+        );
+      }
+      getInitialData();
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    if (!loading && data.getInitialData) {
-      dispatch(addPosts(data.getInitialData.posts));
-      dispatch(addSuggestedUsers(data.getInitialData.suggestedUsers));
+    if (!loading && data?.getInitialData) {
+      dispatch(addPosts(data?.getInitialData.posts));
+      dispatch(addSuggestedUsers(data?.getInitialData.suggestedUsers));
     }
   }, [loading]);
 
@@ -75,7 +87,7 @@ export default function Layout({ children }: PropsWithChildren) {
     ];
   }, []);
 
-  return (
+  return isAuthenticated ? (
     <div className="bg-primary-background h-screen w-screen flex flex-col md:flex-row pb-8 md:pb-0">
       <div className="hidden md:block w-1/10 lg:w-1/6 border-r-[1px] border-solid  px-2 py-4 border-primary-border">
         <div className="px-4">
@@ -168,5 +180,7 @@ export default function Layout({ children }: PropsWithChildren) {
         <CreatePost onDone={toggleCreatePostForm} />
       </Model>
     </div>
+  ) : (
+    <>{children}</>
   );
 }
