@@ -10,6 +10,7 @@ import Home from "./components/home";
 import Search from "./components/search";
 import Notifications from "./components/notification";
 import Profile from "./components/profile";
+import Cookies from "js-cookie";
 
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 import { RootStateType } from "./redux/store";
@@ -39,6 +40,7 @@ export default function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  console.log({ token: Cookies.get("token") });
   useEffect(() => {
     if (!loading && data) {
       dispatch(
